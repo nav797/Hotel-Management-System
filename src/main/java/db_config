@@ -1,0 +1,5 @@
+DB_USER = newuser
+DB_PASSWORD = password
+DB_NAME = testdb
+DB_HOST = 44.203.179.0
+DB_PORT = 3306
