@@ -1,3 +1,4 @@
+package project;
 import java.io.*;
 import java.sql.*;
 import java.util.Properties;
@@ -18,7 +19,7 @@ public class DatabaseConnection {
     }
 
     private void connect() {
-        try (BufferedReader br = new BufferedReader(new FileReader("src/DB_SwingWorker/db_config.txt"))) {
+        try (BufferedReader br = new BufferedReader(new FileReader("src/main/java/project/db_config"))) {
             Properties properties = new Properties();
             properties.load(br);
 
