@@ -6,13 +6,14 @@ import java.sql.ResultSet;
 import javax.swing.JOptionPane;
 
 public class CheckUser {
+	 public static int userId;
 
 	
 	public static String checkUser(String username, String password) {
 		String role = "none";
 		
 		try (Connection conn = DatabaseConnection.getInstance().getConnection();
-	             PreparedStatement ps = conn.prepareStatement("SELECT role FROM Users WHERE username = ? AND password = ?")) {
+	             PreparedStatement ps = conn.prepareStatement("SELECT id,role FROM Users WHERE username = ? AND password = ?")) {
 
 	            ps.setString(1, username);
 	            ps.setString(2, password); 
@@ -20,6 +21,7 @@ public class CheckUser {
 	            ResultSet rs = ps.executeQuery();
 	            if (rs.next()) {
 	                role = rs.getString("role"); 
+	                userId = rs.getInt("id"); 
 	            } else {
 	            	JOptionPane.showMessageDialog(null, "User Not Found");
 	            }

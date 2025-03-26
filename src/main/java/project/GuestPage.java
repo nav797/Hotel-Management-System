@@ -19,6 +19,7 @@ public class GuestPage extends JFrame {
 	private JPanel contentPane;
 	private JTextField textField;
 	private JTextField textField_1;
+	public JTable reservationTable;
 
 	/**
 	 * Launch the application.
@@ -92,7 +93,13 @@ public class GuestPage extends JFrame {
 		comboBox.setBounds(163, 123, 150, 27);
 		contentPane.add(comboBox);
 		
-		JTable reservationTable = new JTable();
+		comboBox.addItem("None");
+		comboBox.addItem("Dining");
+		comboBox.addItem("Spa");
+		comboBox.addItem("Room Service");
+		comboBox.addItem("Laundry");
+		
+		reservationTable = new JTable();
 		
 		JScrollPane scrollPane = new JScrollPane(reservationTable);
 		scrollPane.setBounds(21, 185, 700, 300);
@@ -113,6 +120,10 @@ public class GuestPage extends JFrame {
 		JButton roomsButton = new JButton("Available Rooms");
 		roomsButton.setBounds(408, 518, 140, 29);
 		contentPane.add(roomsButton);
+		roomsButton.addActionListener(e->{
+			new GuestWorker("ALL",this).execute();
+			
+		});
 		
 		JButton userResButton = new JButton("My Reservations");
 		userResButton.setBounds(572, 518, 130, 29);
