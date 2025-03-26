@@ -53,6 +53,34 @@ public class GuestWorker extends SwingWorker<Void,Void> {
                 }
                 ((DefaultTableModel) form.reservationTable.getModel()).fireTableDataChanged(); 
                 break;
+             
+            case "RESO":
+            	int guest_id = CheckUser.userId;
+            	stmt= conn.prepareStatement("SELECT r.id, r.room_number, r.room_type, r.price_per_night, res.check_in_date, res.check_out_date, res.payment_status, res.additional_service "
+            			+ "FROM Reservations res "
+            			+ "JOIN Rooms r ON res.room_id=r.id"
+            			+ " WHERE res.guest_id = ?");
+            	stmt.setInt(1, guest_id);
+            	ResultSet rs2 = stmt.executeQuery();
+                
+            	String[] columnNames2 = {"Reservation ID", "Room Number", "Room Type", "Price", "Check-in Date","Check-out Date", "Payment Status", "Additional Service"};
+                DefaultTableModel model2 = new DefaultTableModel(columnNames2, 0); 
+                form.reservationTable.setModel(model2);
+                
+                while (rs2.next()) {
+                    model2.addRow(new Object[]{
+                        rs2.getInt("id"),
+                        rs2.getString("room_number"),
+                        rs2.getString("room_type"),
+                        rs2.getDouble("price_per_night"),
+                        rs2.getDate("check_in_date"),
+                        rs2.getDate("check_out_date"),
+                        rs2.getString("payment_status"),
+                        rs2.getString("additional_service")
+                    });
+                }
+                ((DefaultTableModel) form.reservationTable.getModel()).fireTableDataChanged(); 
+                break;
                 
             }
             
@@ -65,9 +93,7 @@ public class GuestWorker extends SwingWorker<Void,Void> {
 	}
 	
 	protected void done() {
-    	if (!action.equals("ALL")) { // Only refresh if not a search operation
-    		new GuestWorker("ALL", form).execute(); // Refresh table after operation
-    	}
+    	
     }
 	
 
