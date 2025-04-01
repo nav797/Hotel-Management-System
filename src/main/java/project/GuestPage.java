@@ -16,10 +16,14 @@ import javax.swing.JButton;
 public class GuestPage extends JFrame {
 
 	private static final long serialVersionUID = 1L;
-	private JPanel contentPane;
-	private JTextField textField;
-	private JTextField textField_1;
+	JPanel contentPane;
+	public JTextField textField;
+	public JTextField textField_1;
 	public JTable reservationTable;
+	public JSpinner checkInSpinner;
+	public JSpinner checkOutSpinner;
+	public JComboBox<String> comboBox;
+	public String currentTableMode = "";
 
 	/**
 	 * Launch the application.
@@ -71,7 +75,7 @@ public class GuestPage extends JFrame {
 		checkInLabel.setBounds(313, 28, 80, 16);
 		contentPane.add(checkInLabel);
 		
-		JSpinner checkInSpinner = new JSpinner(new SpinnerDateModel());
+		checkInSpinner = new JSpinner(new SpinnerDateModel());
 		checkInSpinner.setBounds(400, 23, 120, 26);
 		checkInSpinner.setEditor(new JSpinner.DateEditor(checkInSpinner, "yyyy-MM-dd"));
 		contentPane.add(checkInSpinner);
@@ -80,7 +84,7 @@ public class GuestPage extends JFrame {
 		checkOutLabel.setBounds(313, 74, 80, 16);
 		contentPane.add(checkOutLabel);
 		
-		JSpinner checkOutSpinner = new JSpinner(new SpinnerDateModel());
+		checkOutSpinner = new JSpinner(new SpinnerDateModel());
 		checkOutSpinner.setBounds(400, 69, 120, 26);
 		checkOutSpinner.setEditor(new JSpinner.DateEditor(checkInSpinner, "yyyy-MM-dd"));
 		contentPane.add(checkOutSpinner);
@@ -89,7 +93,7 @@ public class GuestPage extends JFrame {
 		servicesLabel.setBounds(21, 127, 130, 16);
 		contentPane.add(servicesLabel);
 		
-		JComboBox<String> comboBox = new JComboBox<String>();
+		comboBox = new JComboBox<String>();
 		comboBox.setBounds(163, 123, 150, 27);
 		contentPane.add(comboBox);
 		
@@ -112,6 +116,10 @@ public class GuestPage extends JFrame {
 		JButton modifyButton = new JButton("Modify");
 		modifyButton.setBounds(150, 518, 117, 29);
 		contentPane.add(modifyButton);
+		modifyButton.addActionListener(e->{
+			new GuestWorker("UPDATE",this).execute();
+			
+		});
 		
 		JButton deleteButton = new JButton("Delete");
 		deleteButton.setBounds(279, 518, 117, 29);
@@ -121,6 +129,7 @@ public class GuestPage extends JFrame {
 		roomsButton.setBounds(408, 518, 140, 29);
 		contentPane.add(roomsButton);
 		roomsButton.addActionListener(e->{
+			currentTableMode = "ALL";
 			new GuestWorker("ALL",this).execute();
 			
 		});
@@ -129,6 +138,7 @@ public class GuestPage extends JFrame {
 		userResButton.setBounds(572, 518, 130, 29);
 		contentPane.add(userResButton);
 		userResButton.addActionListener(e->{
+			currentTableMode = "RESO";
 			new GuestWorker("RESO",this).execute();
 			
 		});

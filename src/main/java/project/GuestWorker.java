@@ -1,6 +1,7 @@
 package project;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
@@ -33,6 +34,38 @@ public class GuestWorker extends SwingWorker<Void,Void> {
                     JOptionPane.showMessageDialog(null, "No reservation selected.");
                     return null;
                 }
+                int reservationId = (int) form.reservationTable.getValueAt(rowIndex, 0);
+
+                
+
+                Date checkInDate = (Date) (form.reservationTable.getValueAt(rowIndex, 4));
+                if (form.checkInSpinner.getValue() != null) {
+                    checkInDate = new java.sql.Date(((java.util.Date) form.checkInSpinner.getValue()).getTime());
+                }
+
+                Date checkOutDate = (Date) (form.reservationTable.getValueAt(rowIndex, 5));
+                if (form.checkOutSpinner.getValue() != null) {
+                    checkOutDate = new java.sql.Date(((java.util.Date) form.checkOutSpinner.getValue()).getTime());
+                }
+
+                String service = form.comboBox.getSelectedItem().toString().equals("None")
+                        ? form.reservationTable.getValueAt(rowIndex, 7).toString()
+                        : form.comboBox.getSelectedItem().toString();
+
+             
+                stmt = conn.prepareStatement(
+                        "UPDATE Reservations SET check_in_date = ?, check_out_date = ?, additional_service = ? WHERE id = ?");
+
+                stmt.setDate(1, new java.sql.Date(checkInDate.getTime()));
+                stmt.setDate(2, new java.sql.Date(checkOutDate.getTime()));
+                stmt.setString(3, service);
+                stmt.setInt(4, reservationId);
+
+                stmt.executeUpdate();
+
+            
+                break;
+
                 
             case "ALL":
             	stmt= conn.prepareStatement("SELECT id, room_number, room_type, price_per_night, status FROM Rooms WHERE status = 'Available'");
@@ -56,7 +89,7 @@ public class GuestWorker extends SwingWorker<Void,Void> {
              
             case "RESO":
             	int guest_id = CheckUser.userId;
-            	stmt= conn.prepareStatement("SELECT r.id, r.room_number, r.room_type, r.price_per_night, res.check_in_date, res.check_out_date, res.payment_status, res.additional_service "
+            	stmt= conn.prepareStatement("SELECT res.id, r.room_number, r.room_type, r.price_per_night, res.check_in_date, res.check_out_date, res.payment_status, res.additional_service "
             			+ "FROM Reservations res "
             			+ "JOIN Rooms r ON res.room_id=r.id"
             			+ " WHERE res.guest_id = ?");
@@ -93,6 +126,9 @@ public class GuestWorker extends SwingWorker<Void,Void> {
 	}
 	
 	protected void done() {
+		if (action.equals("UPDATE")) {
+	        new GuestWorker("RESO", form).execute();
+	    }
     	
     }
 	
