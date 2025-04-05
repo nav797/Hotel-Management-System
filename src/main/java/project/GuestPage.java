@@ -112,6 +112,11 @@ public class GuestPage extends JFrame {
 		JButton bookButton = new JButton("Book");
 		bookButton.setBounds(21, 518, 117, 29);
 		contentPane.add(bookButton);
+		bookButton.addActionListener(e->{
+			
+			new GuestWorker("INSERT",this).execute();
+			
+		});
 		
 		JButton modifyButton = new JButton("Modify");
 		modifyButton.setBounds(150, 518, 117, 29);
@@ -124,6 +129,11 @@ public class GuestPage extends JFrame {
 		JButton deleteButton = new JButton("Delete");
 		deleteButton.setBounds(279, 518, 117, 29);
 		contentPane.add(deleteButton);
+		deleteButton.addActionListener(e->{
+			
+			new GuestWorker("DELETE",this).execute();
+			
+		});
 		
 		JButton roomsButton = new JButton("Available Rooms");
 		roomsButton.setBounds(408, 518, 140, 29);

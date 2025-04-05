@@ -26,7 +26,46 @@ public class GuestWorker extends SwingWorker<Void,Void> {
 
             switch (action) {
             case "INSERT":
-            	JOptionPane.showMessageDialog(null,"Need to work on this one - Add Pay no or later featture");
+            	int rowIndex3 = form.reservationTable.getSelectedRow();
+                if (rowIndex3 == -1) {
+                    JOptionPane.showMessageDialog(null, "No room selected.");
+                    return null;
+                }
+
+                int roomId3 = (int) form.reservationTable.getValueAt(rowIndex3, 0);
+                
+                int guestId = CheckUser.userId;
+
+                java.sql.Date checkInDate1 = form.checkInSpinner.getValue() == null ? null 
+                    : new java.sql.Date(((java.util.Date) form.checkInSpinner.getValue()).getTime());
+
+                java.sql.Date checkOutDate1 = form.checkOutSpinner.getValue() == null ? null 
+                    : new java.sql.Date(((java.util.Date) form.checkOutSpinner.getValue()).getTime());
+
+                String service1 = form.comboBox.getSelectedItem().toString().equals("None") 
+                    ? null : form.comboBox.getSelectedItem().toString();
+
+                PreparedStatement insertStmt = conn.prepareStatement(
+                    "INSERT INTO Reservations (guest_id, room_id, check_in_date, check_out_date, payment_status, additional_service) VALUES (?, ?, ?, ?, 'Pending', ?)"
+                );
+
+                insertStmt.setInt(1, guestId);
+                insertStmt.setInt(2, roomId3);
+                insertStmt.setDate(3, checkInDate1);
+                insertStmt.setDate(4, checkOutDate1);
+                insertStmt.setString(5, service1);
+                insertStmt.executeUpdate();
+
+                PreparedStatement updateStmt = conn.prepareStatement(
+                    "UPDATE Rooms SET status = 'Occupied' WHERE id = ?"
+                );
+                updateStmt.setInt(1, roomId3);
+                updateStmt.executeUpdate();
+
+                JOptionPane.showMessageDialog(null, "Reservation added successfully.");
+
+                break;
+
             	
             case "UPDATE":
             	int rowIndex = form.reservationTable.getSelectedRow();
@@ -65,6 +104,49 @@ public class GuestWorker extends SwingWorker<Void,Void> {
 
             
                 break;
+            case "DELETE":
+            	int rowIndex1 = form.reservationTable.getSelectedRow();
+                if (rowIndex1 == -1) {
+                    JOptionPane.showMessageDialog(null, "No reservation selected.");
+                    return null;
+                }
+
+             
+                int reservationId1 = (int) form.reservationTable.getValueAt(rowIndex1, 0);
+                
+                int roomId;  
+                stmt = conn.prepareStatement("SELECT room_id FROM Reservations WHERE id = ?");
+                stmt.setInt(1, reservationId1);
+                ResultSet rs1 = stmt.executeQuery();
+                if (rs1.next()) {  
+                    roomId = rs1.getInt("room_id"); 
+                } else {
+                    JOptionPane.showMessageDialog(null, "Error: Could not find the room for the selected reservation.");
+                    return null;
+                }
+
+                
+                
+                int confirm = JOptionPane.showConfirmDialog(null, 
+                        "Are you sure you want to delete this reservation?", 
+                        "Confirm", 
+                        JOptionPane.YES_NO_OPTION);
+                
+                if (confirm == JOptionPane.YES_OPTION) {
+                    
+                    stmt = conn.prepareStatement("DELETE FROM Reservations WHERE id = ?");
+                    stmt.setInt(1, reservationId1);
+                    
+                    stmt = conn.prepareStatement("UPDATE Rooms SET status = 'Available' WHERE id = ?");
+                    stmt.setInt(1, roomId);
+                    stmt.executeUpdate();
+                        
+                    JOptionPane.showMessageDialog(null, "Reservation deleted successfully.");
+
+                }
+                break;
+
+
 
                 
             case "ALL":
@@ -126,7 +208,7 @@ public class GuestWorker extends SwingWorker<Void,Void> {
 	}
 	
 	protected void done() {
-		if (action.equals("UPDATE")) {
+		if (action.equals("UPDATE")|| action.equals("DELETE") || action.equals("INSERT")) {
 	        new GuestWorker("RESO", form).execute();
 	    }
     	
