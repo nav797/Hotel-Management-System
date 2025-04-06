@@ -23,7 +23,6 @@ public class GuestPage extends JFrame {
 	public JSpinner checkInSpinner;
 	public JSpinner checkOutSpinner;
 	public JComboBox<String> comboBox;
-	public String currentTableMode = "";
 
 	/**
 	 * Launch the application.
@@ -139,7 +138,7 @@ public class GuestPage extends JFrame {
 		roomsButton.setBounds(408, 518, 140, 29);
 		contentPane.add(roomsButton);
 		roomsButton.addActionListener(e->{
-			currentTableMode = "ALL";
+			
 			new GuestWorker("ALL",this).execute();
 			
 		});
@@ -148,7 +147,7 @@ public class GuestPage extends JFrame {
 		userResButton.setBounds(572, 518, 130, 29);
 		contentPane.add(userResButton);
 		userResButton.addActionListener(e->{
-			currentTableMode = "RESO";
+			
 			new GuestWorker("RESO",this).execute();
 			
 		});

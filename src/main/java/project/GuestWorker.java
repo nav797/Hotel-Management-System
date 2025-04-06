@@ -155,7 +155,7 @@ public class GuestWorker extends SwingWorker<Void,Void> {
                 
             	String[] columnNames = {"Room ID", "Room Number", "Room Type", "Price", "Status"};
                 DefaultTableModel model = new DefaultTableModel(columnNames, 0); 
-                form.reservationTable.setModel(model);
+                
                 
                 while (rs.next()) {
                     model.addRow(new Object[]{
@@ -166,6 +166,7 @@ public class GuestWorker extends SwingWorker<Void,Void> {
                         rs.getString("status") 
                     });
                 }
+                form.reservationTable.setModel(model);
                 ((DefaultTableModel) form.reservationTable.getModel()).fireTableDataChanged(); 
                 break;
              
@@ -180,7 +181,7 @@ public class GuestWorker extends SwingWorker<Void,Void> {
                 
             	String[] columnNames2 = {"Reservation ID", "Room Number", "Room Type", "Price", "Check-in Date","Check-out Date", "Payment Status", "Additional Service"};
                 DefaultTableModel model2 = new DefaultTableModel(columnNames2, 0); 
-                form.reservationTable.setModel(model2);
+                
                 
                 while (rs2.next()) {
                     model2.addRow(new Object[]{
@@ -194,6 +195,7 @@ public class GuestWorker extends SwingWorker<Void,Void> {
                         rs2.getString("additional_service")
                     });
                 }
+                form.reservationTable.setModel(model2);
                 ((DefaultTableModel) form.reservationTable.getModel()).fireTableDataChanged(); 
                 break;
                 

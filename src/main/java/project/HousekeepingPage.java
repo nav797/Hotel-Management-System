@@ -19,9 +19,9 @@ public class HousekeepingPage extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
-	public JTextField textField;
 	public JTable reservationTable;
 	public JComboBox<String> comboBox;
+	public JComboBox <String>itemNameUpdate;
 	public JSpinner spinner;
 	private InventoryNotifier IN = new InventoryNotifier();
 
@@ -55,14 +55,21 @@ public class HousekeepingPage extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-		textField = new JTextField();
-		textField.setBounds(525, 74, 130, 26);
-		contentPane.add(textField);
-		textField.setColumns(10);
-		
 		JLabel itemLabel = new JLabel("Inventory Item: ");
 		itemLabel.setBounds(421, 79, 100, 16);
 		contentPane.add(itemLabel);
+		
+		itemNameUpdate = new JComboBox<String>();
+		itemNameUpdate.setBounds(525, 75, 150, 27);
+		contentPane.add(itemNameUpdate);
+		
+		itemNameUpdate.addItem("Toothpaste");
+		itemNameUpdate.addItem("Towels");
+		itemNameUpdate.addItem("Shampoo");
+		itemNameUpdate.addItem("Mr. Clean Spray");
+		itemNameUpdate.addItem("Chips");
+		itemNameUpdate.addItem("Blankets");
+		
 		
 		JLabel itemQanLabel = new JLabel("Quantity:");
 		itemQanLabel.setBounds(421, 125, 100, 16);
@@ -96,7 +103,7 @@ public class HousekeepingPage extends JFrame {
 		contentPane.add(uptButton);
 		uptButton.addActionListener(e->{
 			
-			
+			new HousekeepingWorker("UPDATEROOM",this).execute();
 			
 		});
 		
@@ -120,10 +127,8 @@ public class HousekeepingPage extends JFrame {
 		JButton roomsButton = new JButton("Rooms");
 		roomsButton.setBounds(572, 518, 130, 29);
 		contentPane.add(roomsButton);
-		
-	
 		roomsButton.addActionListener(e->{
-			
+			new HousekeepingWorker("ROOMS",this).execute();
 			
 		});
 		

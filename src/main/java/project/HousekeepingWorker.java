@@ -13,6 +13,7 @@ public class HousekeepingWorker extends SwingWorker<Void,Void>{
 	
 	private final String action;
 	private final HousekeepingPage form;
+	String display = "Ini";
 	
 	
 	
@@ -31,11 +32,69 @@ public class HousekeepingWorker extends SwingWorker<Void,Void>{
             
 
             switch (action) {
-            case "INSERT":
-            	JOptionPane.showMessageDialog(null, "jfkhbalwfji ");
+            case "UPDATEROOM":
+            	rowIndex = form.reservationTable.getSelectedRow();
+                if (rowIndex == -1) {
+                    JOptionPane.showMessageDialog(null, "No reservation selected.");
+                    return null;
+                }
+                int taskId = (int) form.reservationTable.getValueAt(rowIndex, 0);
+                
+                String newStatus = (String) form.comboBox.getSelectedItem();
+                
+                String name = (String) form.itemNameUpdate.getSelectedItem();
+                
+                int itemUsed = (int) form.spinner.getValue();
+                
+                
+                stmt = conn.prepareStatement("UPDATE Housekeeping SET status = ? WHERE id = ?");
+                stmt.setString(1, newStatus);
+                stmt.setInt(2, taskId);
+                stmt.executeUpdate();
+                
+                if(itemUsed > 0 ) {
+                	stmt = conn.prepareStatement("SELECT quantity FROM Inventory WHERE item_name = ?");
+                    stmt.setString(1, name);
+                    rs = stmt.executeQuery();
+                    
+                    if (rs.next()) {
+                    int currentQuan = rs.getInt("quantity");
+                    
+                    
+                    int newQuan = currentQuan - itemUsed;
+                    
+                    stmt = conn.prepareStatement("UPDATE Inventory SET quantity = ? WHERE item_name = ?");
+                    stmt.setInt(1, newQuan);
+                    stmt.setString(2, name);
+                    stmt.executeUpdate();
+                    }
+                    display = "Inventory";
+                }else {
+                	display = "Rooms";
+                }
+                break;
             	
             case "ROOMS":
-            	JOptionPane.showMessageDialog(null, "jfkhbalwfji ");
+            	stmt= conn.prepareStatement("SELECT h.id, h.room_id, r.room_number, h.status FROM Housekeeping h "
+            			+ "JOIN Rooms r ON h.room_id = r.id "
+            			+ "WHERE h.status IN ('Pending', 'In Progress')");
+            	rs = stmt.executeQuery();
+                
+            	String[] columnNames1 = {"Taks ID", "Room ID", "Room Number", "Status"};
+               model = new DefaultTableModel(columnNames1, 0); 
+               
+                
+                while (rs.next()) {
+                    model.addRow(new Object[]{
+                        rs.getInt("id"),
+                        rs.getInt("room_id"),
+                        rs.getString("room_number"),
+                        rs.getString("status") 
+                    });
+                }
+                form.reservationTable.setModel(model);
+                ((DefaultTableModel) form.reservationTable.getModel()).fireTableDataChanged(); 
+                break;
             	
             case "UPDATEINV":
             	rowIndex = form.reservationTable.getSelectedRow();
@@ -52,7 +111,7 @@ public class HousekeepingWorker extends SwingWorker<Void,Void>{
                 if (rs.next()) {
                 int currentQuan = rs.getInt("quantity");
                 
-                int addedQuan = (Integer) form.spinner.getValue();
+                int addedQuan = (int) form.spinner.getValue();
                 
                 int newQuan = currentQuan + addedQuan;
                 
@@ -107,8 +166,11 @@ public class HousekeepingWorker extends SwingWorker<Void,Void>{
 	}
 	
 	protected void done() {
-		if (action.equals("UPDATEINV")|| action.equals("DELETE") || action.equals("INSERT")) {
+		if (action.equals("UPDATEINV")|| display.equals("Inventory") || action.equals("INSERT")) {
 	        new HousekeepingWorker("ALLINV", form).execute();
+	    }
+		if ( display.equals("Rooms")) {
+	        new HousekeepingWorker("ROOMS", form).execute();
 	    }
     	
     }
