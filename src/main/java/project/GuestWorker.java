@@ -4,6 +4,8 @@ import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Statement;
+import java.util.concurrent.TimeUnit;
 
 import javax.swing.JOptionPane;
 import javax.swing.SwingWorker;
@@ -44,9 +46,36 @@ public class GuestWorker extends SwingWorker<Void,Void> {
 
                 String service1 = form.comboBox.getSelectedItem().toString().equals("None") 
                     ? null : form.comboBox.getSelectedItem().toString();
+                
+                double pricePerNight = (double) form.reservationTable.getValueAt(rowIndex3, 3);
+                
+                long difference = checkOutDate1.getTime() - checkInDate1.getTime();
+                
+                long nights = TimeUnit.DAYS.convert(difference, TimeUnit.MILLISECONDS);
+                
+                double servicePrice =0;
+                
+                if (service1 != null) {
+                    stmt = conn.prepareStatement(
+                        "SELECT default_price FROM AdditionalServicesPricing WHERE service_name = ?"
+                    );
+                    stmt.setString(1, service1);
+                    ResultSet serviceRs = stmt.executeQuery();
+                    if (serviceRs.next()) {
+                        servicePrice = serviceRs.getDouble("default_price");
+                    }
+                }
+                System.out.println(nights);
+                System.out.println(difference);
+                double totalAmount = (nights * pricePerNight) + servicePrice;
+                String paymentMethod = "Decide Later";
+                String paymentStatus = "Pending";
+                
+
+                
 
                 PreparedStatement insertStmt = conn.prepareStatement(
-                    "INSERT INTO Reservations (guest_id, room_id, check_in_date, check_out_date, payment_status, additional_service) VALUES (?, ?, ?, ?, 'Pending', ?)"
+                    "INSERT INTO Reservations (guest_id, room_id, check_in_date, check_out_date, payment_status, additional_service) VALUES (?, ?, ?, ?, 'Pending', ?)", Statement.RETURN_GENERATED_KEYS
                 );
 
                 insertStmt.setInt(1, guestId);
@@ -61,7 +90,45 @@ public class GuestWorker extends SwingWorker<Void,Void> {
                 );
                 updateStmt.setInt(1, roomId3);
                 updateStmt.executeUpdate();
+                
+                
+                ResultSet genKeys = insertStmt.getGeneratedKeys();
+                int reservationId2 = 1;
+                if(genKeys.next()) {reservationId2 = genKeys.getInt(1);};
+                
+                
+                int paymentConfirm = JOptionPane.showConfirmDialog(null, 
+                        "Total Price: $"+ totalAmount+" Would you like to pay now?", 
+                        "Payment", 
+                        JOptionPane.YES_NO_OPTION);
+                
+                if (paymentConfirm == JOptionPane.YES_OPTION) {
+                    Object[] options = {"Credit Card", "Cash","Debit"};
+                    paymentMethod = (String) JOptionPane.showInputDialog(null, 
+                    		"Select Payment Method:", 
+                            "Payment Method", 
+                            JOptionPane.QUESTION_MESSAGE, 
+                            null, options, options[0]);
+                    paymentStatus = "Paid";
+                    
+                    PreparedStatement updateResStmt = conn.prepareStatement(
+                            "UPDATE Reservations SET payment_status = 'Paid' WHERE id = ?"
+                        );
+                    updateResStmt.setInt(1, reservationId2);
+                    updateResStmt.executeUpdate();
 
+                }
+                
+                PreparedStatement paymentStmt = conn.prepareStatement(
+                		"INSERT INTO Invoice (reservation_id,total_amount,payment_method,payment_status) VALUES (?,?,?,?)");
+                paymentStmt.setInt(1, reservationId2);
+                paymentStmt.setDouble(2, totalAmount);
+                paymentStmt.setString(3, paymentMethod);
+                paymentStmt.setString(4, paymentStatus);
+                paymentStmt.executeUpdate();
+
+                
+                
                 JOptionPane.showMessageDialog(null, "Reservation added successfully.");
 
                 break;
@@ -136,6 +203,7 @@ public class GuestWorker extends SwingWorker<Void,Void> {
                     
                     stmt = conn.prepareStatement("DELETE FROM Reservations WHERE id = ?");
                     stmt.setInt(1, reservationId1);
+                    stmt.executeUpdate();
                     
                     stmt = conn.prepareStatement("UPDATE Rooms SET status = 'Available' WHERE id = ?");
                     stmt.setInt(1, roomId);

@@ -169,6 +169,12 @@ public class HousekeepingWorker extends SwingWorker<Void,Void>{
 		if (action.equals("UPDATEINV")|| display.equals("Inventory") || action.equals("INSERT")) {
 	        new HousekeepingWorker("ALLINV", form).execute();
 	    }
+		if (display.equals("Inventory")) {
+	        new HousekeepingWorker("ALLINV", form).execute();
+	       // uptButton.setVisible(false);
+			//uptInvButton.setVisible(true);
+			//lblNewLabel.setVisible(true);
+	    }
 		if ( display.equals("Rooms")) {
 	        new HousekeepingWorker("ROOMS", form).execute();
 	    }
