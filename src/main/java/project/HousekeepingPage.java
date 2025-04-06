@@ -12,6 +12,7 @@ import javax.swing.JSpinner;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.SpinnerDateModel;
+import javax.swing.SpinnerNumberModel;
 import javax.swing.border.EmptyBorder;
 
 public class HousekeepingPage extends JFrame {
@@ -19,9 +20,9 @@ public class HousekeepingPage extends JFrame {
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	public JTextField textField;
-	public JTextField textField_1;
 	public JTable reservationTable;
 	public JComboBox<String> comboBox;
+	public JSpinner spinner;
 	private InventoryNotifier IN = new InventoryNotifier();
 
 	/**
@@ -67,11 +68,6 @@ public class HousekeepingPage extends JFrame {
 		itemQanLabel.setBounds(421, 125, 100, 16);
 		contentPane.add(itemQanLabel);
 		
-		textField_1 = new JTextField();
-		textField_1.setBounds(525, 120, 130, 26);
-		contentPane.add(textField_1);
-		textField_1.setColumns(10);
-		
 		
 		JLabel servicesLabel = new JLabel("Room Cleaning Status:");
 		servicesLabel.setBounds(75, 74, 150, 16);
@@ -83,6 +79,10 @@ public class HousekeepingPage extends JFrame {
 		
 		comboBox.addItem("In Progress");
 		comboBox.addItem("Completed");
+		
+		spinner = new JSpinner(new SpinnerNumberModel(0, 0, 1000, 1));
+		spinner.setBounds(525, 120, 120, 26);
+		contentPane.add(spinner);
 		
 		
 		reservationTable = new JTable();
@@ -104,7 +104,7 @@ public class HousekeepingPage extends JFrame {
 		uptInvButton.setBounds(279, 518, 140, 29);
 		contentPane.add(uptInvButton);
 		uptInvButton.addActionListener(e->{
-			
+			new HousekeepingWorker("UPDATEINV",this).execute();
 			
 			
 		});
@@ -114,16 +114,20 @@ public class HousekeepingPage extends JFrame {
 		contentPane.add(invButton);
 		invButton.addActionListener(e->{
 			
-			
+			new HousekeepingWorker("ALLINV",this).execute();
 		});
 		
 		JButton roomsButton = new JButton("Rooms");
 		roomsButton.setBounds(572, 518, 130, 29);
 		contentPane.add(roomsButton);
+		
+	
 		roomsButton.addActionListener(e->{
 			
 			
 		});
+		
+
 	}
 	
 	public InventoryNotifier getNotification() {
