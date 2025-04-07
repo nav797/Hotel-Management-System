@@ -136,6 +136,11 @@ public class HousekeepingPage extends JFrame {
 			uptButton.setVisible(false);
 			uptInvButton.setVisible(true);
 			lblNewLabel.setVisible(true);
+			itemLabel.setVisible(false);
+			itemNameUpdate.setVisible(false);
+			servicesLabel.setVisible(false);
+			comboBox.setVisible(false);
+			
 			new HousekeepingWorker("ALLINV",this).execute();
 		});
 		
@@ -147,6 +152,10 @@ public class HousekeepingPage extends JFrame {
 			uptButton.setVisible(true);
 			uptInvButton.setVisible(false);
 			lblNewLabel.setVisible(false);
+			itemLabel.setVisible(true);
+			itemNameUpdate.setVisible(true);
+			servicesLabel.setVisible(true);
+			comboBox.setVisible(true);
 			new HousekeepingWorker("ROOMS",this).execute();
 			
 			

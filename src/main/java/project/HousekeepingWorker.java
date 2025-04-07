@@ -40,6 +40,8 @@ public class HousekeepingWorker extends SwingWorker<Void,Void>{
                 }
                 int taskId = (int) form.reservationTable.getValueAt(rowIndex, 0);
                 
+                int roomId = (int) form.reservationTable.getValueAt(rowIndex, 1);
+                
                 String newStatus = (String) form.comboBox.getSelectedItem();
                 
                 String name = (String) form.itemNameUpdate.getSelectedItem();
@@ -71,6 +73,13 @@ public class HousekeepingWorker extends SwingWorker<Void,Void>{
                     display = "Inventory";
                 }else {
                 	display = "Rooms";
+                }
+                
+                if(newStatus.equals("Completed")) {
+                	stmt = conn.prepareStatement("UPDATE Rooms SET status = 'Available' WHERE id = ?");
+                    stmt.setInt(1, roomId);
+                    stmt.executeUpdate();
+                	
                 }
                 break;
             	

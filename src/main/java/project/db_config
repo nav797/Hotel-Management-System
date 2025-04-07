@@ -1,5 +1,5 @@
 DB_USER = newuser
 DB_PASSWORD = password
 DB_NAME = project
-DB_HOST = 54.152.154.222
+DB_HOST = 44.210.113.239
 DB_PORT = 3306
