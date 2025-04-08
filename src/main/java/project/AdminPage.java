@@ -1,5 +1,6 @@
 package project;
 
+import java.awt.CardLayout;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -13,6 +14,8 @@ public class AdminPage extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
+	JPanel panel;
+	CreateUserPanel createUserPanel;
 
 	/**
 	 * Launch the application.
@@ -33,7 +36,10 @@ public class AdminPage extends JFrame {
 	/**
 	 * Create the frame.
 	 */
+	
 	public AdminPage() {
+		
+		createUserPanel = new CreateUserPanel(this);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 750, 600);
 		contentPane = new JPanel();
@@ -54,6 +60,21 @@ public class AdminPage extends JFrame {
 		JButton reportButton = new JButton("Reports");
 		reportButton.setBounds(28, 105, 117, 29);
 		contentPane.add(reportButton);
+		
+		panel = new JPanel(new CardLayout());
+		panel.setBounds(38, 146, 668, 400);
+		contentPane.add(panel);
+		
+		panel.add(createUserPanel,"Users");
+		
+		showCard("Users");
+	}
+	
+	private void showCard(String name) {
+		CardLayout cl = (CardLayout) panel.getLayout();
+		cl.show(panel, name);
 	}
 
 }
+
+

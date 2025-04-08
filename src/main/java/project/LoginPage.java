@@ -87,7 +87,7 @@ public class LoginPage extends JFrame {
 		switch(role) {
 		case "Guest":
 			this.dispose();
-			new HousekeepingPage().setVisible(true);
+			new AdminPage().setVisible(true);
 			break;
 		case "Housekeeping":
 			this.dispose();

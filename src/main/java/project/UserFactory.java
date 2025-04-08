@@ -4,7 +4,14 @@ package project;
 	interface User {
 		
 		 String info();
-		}
+		 public String getUsername();
+			public String getFirstName();
+			
+			public String getLastName();
+			
+			public String getPassword();
+			
+			public String getRole();		}
 	
 	class Guest implements User {
 		private String username;
