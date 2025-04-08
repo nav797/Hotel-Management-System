@@ -180,12 +180,23 @@ public class HousekeepingWorker extends SwingWorker<Void,Void>{
 	    }
 		if (display.equals("Inventory")) {
 	        new HousekeepingWorker("ALLINV", form).execute();
-	       // uptButton.setVisible(false);
-			//uptInvButton.setVisible(true);
-			//lblNewLabel.setVisible(true);
+	        form.uptButton.setVisible(false);
+			form.uptInvButton.setVisible(true);
+			form.lblNewLabel.setVisible(true);
+			form.itemLabel.setVisible(false);
+			form.itemNameUpdate.setVisible(false);
+			form.servicesLabel.setVisible(false);
+			form.comboBox.setVisible(false);
 	    }
 		if ( display.equals("Rooms")) {
 	        new HousekeepingWorker("ROOMS", form).execute();
+	        form.uptButton.setVisible(true);
+			form.uptInvButton.setVisible(false);
+			form.lblNewLabel.setVisible(false);
+			form.itemLabel.setVisible(true);
+			form.itemNameUpdate.setVisible(true);
+			form.servicesLabel.setVisible(true);
+			form.comboBox.setVisible(true);
 	    }
     	
     }

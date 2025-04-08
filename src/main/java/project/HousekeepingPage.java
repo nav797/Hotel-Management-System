@@ -29,6 +29,8 @@ public class HousekeepingPage extends JFrame {
 	public JButton uptButton;
 	public JButton uptInvButton;
 	public JLabel lblNewLabel;
+	JLabel itemLabel;
+	JLabel servicesLabel;
 
 	/**
 	 * Launch the application.
@@ -66,7 +68,7 @@ public class HousekeepingPage extends JFrame {
 		contentPane.add(lblNewLabel);
 		lblNewLabel.setVisible(false);
 		
-		JLabel itemLabel = new JLabel("Inventory Item: ");
+		itemLabel = new JLabel("Inventory Item: ");
 		itemLabel.setBounds(320, 74, 100, 16);
 		contentPane.add(itemLabel);
 		
@@ -87,7 +89,7 @@ public class HousekeepingPage extends JFrame {
 		contentPane.add(itemQanLabel);
 		
 		
-		JLabel servicesLabel = new JLabel("Room Cleaning Status:");
+		servicesLabel = new JLabel("Room Cleaning Status:");
 		servicesLabel.setBounds(75, 74, 150, 16);
 		contentPane.add(servicesLabel);
 		
