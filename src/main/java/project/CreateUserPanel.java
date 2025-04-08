@@ -81,7 +81,7 @@ public class CreateUserPanel extends JPanel {
 		add(submitBtn);
 		submitBtn.addActionListener(e->{
 			
-			//new AdminWorker("SUBMIT",parent).execute();
+			new AdminWorker("SUBMIT",parent).execute();
 			
 		});
 

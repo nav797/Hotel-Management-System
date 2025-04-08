@@ -16,6 +16,7 @@ public class AdminPage extends JFrame {
 	private JPanel contentPane;
 	JPanel panel;
 	CreateUserPanel createUserPanel;
+	ReportsPanel reportsPanel;
 
 	/**
 	 * Launch the application.
@@ -40,6 +41,7 @@ public class AdminPage extends JFrame {
 	public AdminPage() {
 		
 		createUserPanel = new CreateUserPanel(this);
+		reportsPanel = new ReportsPanel(this);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 750, 600);
 		contentPane = new JPanel();
