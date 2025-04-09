@@ -53,7 +53,7 @@ public class HousekeepingPage extends JFrame {
 	 */
 	public HousekeepingPage() {
 		InvNotification invNotification = new InvNotification();
-		IN.registerObserver(invNotification);
+		InventoryNotifier.getInstance().registerObserver(invNotification);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 750, 600);
 		contentPane = new JPanel();
@@ -166,8 +166,6 @@ public class HousekeepingPage extends JFrame {
 
 	}
 	
-	public InventoryNotifier getNotification() {
-		return IN;
-	}
+	
 
 }

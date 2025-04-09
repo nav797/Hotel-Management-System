@@ -42,13 +42,13 @@ public class AdminWorker extends SwingWorker<Void,Void> {
             	
             	String role = (String) form.createUserPanel.comboBox.getSelectedItem();
             	
-            	User user = UserFactory.createUser(firstName, lastName, username, password, role);
+            	User user = UserFactory.createUser(username, firstName, lastName, password, role);
             	stmt = conn.prepareStatement(
-                        "INSERT INTO Users (first_name, last_name, username, password, role) VALUES (?, ?, ?, ?, ?)"
+                        "INSERT INTO Users (username, first_name, last_name, password, role) VALUES (?, ?, ?, ?, ?)"
                     );
-            	stmt.setString(1, user.getFirstName());
-            	stmt.setString(2, user.getLastName());
-            	stmt.setString(3, user.getUsername());
+            	stmt.setString(1, user.getUsername());
+            	stmt.setString(2, user.getFirstName());
+            	stmt.setString(3, user.getLastName());
             	stmt.setString(4, user.getPassword());
             	stmt.setString(5, user.getRole());
             	

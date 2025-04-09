@@ -135,7 +135,7 @@ public class HousekeepingWorker extends SwingWorker<Void,Void>{
                 
             	
             case "ALLINV":
-            	InventoryNotifier notification = form.getNotification();
+            	InventoryNotifier notification = InventoryNotifier.getInstance();
             	stmt = conn.prepareStatement("SELECT  item_name,category,quantity ,restock_threshold FROM Inventory");
             	rs = stmt.executeQuery();
             	String[] columnNames = {"Name","Category","Current Stock","Min Stock Needed"};

@@ -87,11 +87,19 @@ public class LoginPage extends JFrame {
 		switch(role) {
 		case "Guest":
 			this.dispose();
-			new AdminPage().setVisible(true);
+			new GuestPage().setVisible(true);
 			break;
 		case "Housekeeping":
 			this.dispose();
 			new HousekeepingPage().setVisible(true);
+			break;
+		case "Receptionist":
+			this.dispose();
+			new ReceptionPage().setVisible(true);
+			break;
+		case "Admin":
+			this.dispose();
+			new AdminPage().setVisible(true);
 			break;
 		default:
 			JOptionPane.showMessageDialog(this,"Unable to open page. Please try again later");

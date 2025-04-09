@@ -45,7 +45,7 @@ package project;
 		}
 	
 	 public String info() {
-	 return role+" User"+firstName+" "+lastName+" created!";
+	 return role+" User "+firstName+" "+lastName+" created!";
 	 }
 	}
 	
@@ -83,7 +83,7 @@ package project;
 		}
 	
 	 public String info() {
-	 return role+" User"+firstName+" "+lastName+" created!";
+	 return role+" User "+firstName+" "+lastName+" created!";
 	 }
 	}
 	
@@ -120,7 +120,7 @@ package project;
 		}
 	
 	 public String info() {
-	 return role+" User"+firstName+" "+lastName+" created!";
+	 return role+" User "+firstName+" "+lastName+" created!";
 	 }
 	}
 	
@@ -156,7 +156,7 @@ package project;
 		}
 	
 	 public String info() {
-	 return role+" User"+firstName+" "+lastName+" created!";
+	 return role+" User "+firstName+" "+lastName+" created!";
 	 }
 	}
 	
