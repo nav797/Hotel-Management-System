@@ -58,16 +58,27 @@ public class AdminPage extends JFrame {
 		JButton userButton = new JButton("Create Users");
 		userButton.setBounds(28, 64, 117, 29);
 		contentPane.add(userButton);
+		userButton.addActionListener(e->{
+			
+			showCard("Users");
+			
+		});
 		
 		JButton reportButton = new JButton("Reports");
 		reportButton.setBounds(28, 105, 117, 29);
 		contentPane.add(reportButton);
+		reportButton.addActionListener(e->{
+			
+			showCard("Reports");
+			
+		});
 		
 		panel = new JPanel(new CardLayout());
 		panel.setBounds(38, 146, 668, 400);
 		contentPane.add(panel);
 		
 		panel.add(createUserPanel,"Users");
+		panel.add(reportsPanel,"Reports");
 		
 		showCard("Users");
 	}

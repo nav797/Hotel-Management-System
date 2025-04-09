@@ -24,7 +24,7 @@ public class HousekeepingPage extends JFrame {
 	public JComboBox<String> comboBox;
 	public JComboBox <String>itemNameUpdate;
 	public JSpinner spinner;
-	private InventoryNotifier IN = new InventoryNotifier();
+	InventoryNotifier IN = new InventoryNotifier();
 	
 	public JButton uptButton;
 	public JButton uptInvButton;

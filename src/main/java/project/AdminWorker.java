@@ -44,7 +44,7 @@ public class AdminWorker extends SwingWorker<Void,Void> {
             	
             	User user = UserFactory.createUser(firstName, lastName, username, password, role);
             	stmt = conn.prepareStatement(
-                        "INSERT INTO Users (first_name, last_name, username, password, role) VALUES (?, ?, ?, ?, ?, ?)"
+                        "INSERT INTO Users (first_name, last_name, username, password, role) VALUES (?, ?, ?, ?, ?)"
                     );
             	stmt.setString(1, user.getFirstName());
             	stmt.setString(2, user.getLastName());
@@ -52,7 +52,10 @@ public class AdminWorker extends SwingWorker<Void,Void> {
             	stmt.setString(4, user.getPassword());
             	stmt.setString(5, user.getRole());
             	
+            	stmt.executeUpdate();
+            	
             	JOptionPane.showMessageDialog(null, user.info());
+            	break;
             	
             case"RESO":
             	
@@ -66,6 +69,7 @@ public class AdminWorker extends SwingWorker<Void,Void> {
                 
                 
                 while (rs.next()) {
+                	
                 	model.addRow(new Object[]{
                     		rs.getInt("id"),
                     		rs.getInt("guest_id"),
@@ -81,7 +85,7 @@ public class AdminWorker extends SwingWorker<Void,Void> {
                 break;
                 
             case"ROOMS":
-            	stmt= conn.prepareStatement("SELECT id, room_number, room_type, price_per_night, status FROM Housekeeping  ");
+            	stmt= conn.prepareStatement("SELECT id, room_number, room_type, price_per_night, status FROM Rooms  ");
             	rs = stmt.executeQuery();
                 
             	String[] columnNames2 = {"ID", "Room Number", "Room Type", "Price Per Night", "Status"};
@@ -98,6 +102,74 @@ public class AdminWorker extends SwingWorker<Void,Void> {
                     });
                 }
                 form.reportsPanel.table.setModel(model);
+                ((DefaultTableModel) form.reportsPanel.table.getModel()).fireTableDataChanged(); 
+                break;
+                
+            case"HOUSE":
+            	stmt= conn.prepareStatement("SELECT id, room_id, status FROM Housekeeping  ");
+            	rs = stmt.executeQuery();
+                
+            	String[] columnNames3 = {"ID", "Room ID", "Status"};
+               model = new DefaultTableModel(columnNames3, 0); 
+               
+                
+                while (rs.next()) {
+                    model.addRow(new Object[]{
+                        rs.getInt("id"),
+                        rs.getInt("room_id"),
+                        rs.getString("status") 
+                    });
+                }
+                form.reportsPanel.table.setModel(model);
+                ((DefaultTableModel) form.reportsPanel.table.getModel()).fireTableDataChanged(); 
+                break;
+                
+            case"INVOICE":
+            	stmt= conn.prepareStatement("SELECT id, reservation_id, total_amount, payment_method, payment_status FROM Invoice  ");
+            	rs = stmt.executeQuery();
+                
+            	String[] columnNames4 = {"ID", "Room ID","Total","Payment Method", "Status"};
+               model = new DefaultTableModel(columnNames4, 0); 
+               
+                
+                while (rs.next()) {
+                    model.addRow(new Object[]{
+                        rs.getInt("id"),
+                        rs.getInt("reservation_id"),
+                        rs.getDouble("total_amount"),
+                        rs.getString("payment_method"),
+                        rs.getString("payment_status") 
+                    });
+                }
+                form.reportsPanel.table.setModel(model);
+                ((DefaultTableModel) form.reportsPanel.table.getModel()).fireTableDataChanged(); 
+                break;
+                
+            case "ALLINV":
+            	InventoryNotifier notification = InventoryNotifier.getInstance();
+            	stmt = conn.prepareStatement("SELECT  item_name,category,quantity ,restock_threshold FROM Inventory");
+            	rs = stmt.executeQuery();
+            	String[] columnNames5 = {"Name","Category","Current Stock","Min Stock Needed"};
+            	model = new DefaultTableModel(columnNames5, 0); 
+                form.reportsPanel.table.setModel(model);
+                
+                while (rs.next()) {
+                	String itemName = rs.getString("item_name");
+                	String cat = rs.getString("category");
+                	int quantity = rs.getInt("quantity");
+                	int threshold = rs.getInt("restock_threshold");
+                    model.addRow(new Object[]{
+                    		itemName,
+                    		cat,
+                    		quantity,
+                    		threshold,
+                        
+                    });
+                    
+                    if (quantity < threshold) {
+                    	notification.notifyObservers(itemName, quantity,threshold);
+                    }
+                }
                 ((DefaultTableModel) form.reportsPanel.table.getModel()).fireTableDataChanged(); 
                 break;
                     
@@ -118,4 +190,5 @@ public class AdminWorker extends SwingWorker<Void,Void> {
 	    }
     	
     }
+	
 }

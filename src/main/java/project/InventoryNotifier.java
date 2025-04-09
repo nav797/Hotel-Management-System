@@ -11,7 +11,15 @@ import javax.swing.JOptionPane;
 	}
 	
 	class InventoryNotifier {
+	 private static InventoryNotifier instance;
 	 private List<Observer> observers = new ArrayList<>();
+	 
+	 public static InventoryNotifier getInstance() {
+	        if (instance == null) {
+	            instance = new InventoryNotifier();
+	        }
+	        return instance;
+	    }
 	
 	 void registerObserver(Observer o) {
 	 observers.add(o);
