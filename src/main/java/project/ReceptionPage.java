@@ -86,12 +86,12 @@ public class ReceptionPage extends JFrame {
 		
 		try {
 		    Connection conn = DatabaseConnection.getInstance().getConnection();
-		    PreparedStatement stmt = conn.prepareStatement("SELECT id, username FROM Users WHERE role = 'Guest'");
+		    PreparedStatement stmt = conn.prepareStatement("SELECT id, first_name FROM Users WHERE role = 'Guest'");
 		    ResultSet rs = stmt.executeQuery();
 
 		    while (rs.next()) {
 		    	int id = rs.getInt("id");
-		        String username = rs.getString("username");
+		        String username = rs.getString("first_name");
 		        guestList.addItem(username);
 		        guestMap.put(username, id);
 		    }
